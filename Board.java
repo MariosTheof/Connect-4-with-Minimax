@@ -124,7 +124,7 @@ public class Board
 					child.makeMove(row, col, letter);
 					children.add(child);
 				}
-
+			}
 		}
 		return children;
 	}
@@ -142,9 +142,10 @@ public class Board
 				 Olines = Olines + 100;
 			 }
 		 }
+		 return Xlines - Olines;  
 	}
 
-	
+
 
   public boolean hasSomeoneWon() {
 
@@ -190,7 +191,7 @@ public class Board
 		return false;
   }
 
-	public isStalemate(){
+	public boolean isStalemate(){
 		if (hasSomeoneWon()) {
 			return true;
 		}
@@ -211,18 +212,18 @@ public class Board
 		System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
 		for(int row = 0; row < 6; row++) {
 			for(int col = 0; col < 7; col++) {
-				if (j!=6) {
-					if (gameBoard[i][j] == 1) {
+				if (col != 6) {
+					if (gameBoard[row][col] == 1) {
 						System.out.print("| " + "X" + " ");
-					} else if (gameBoard[i][j] == -1) {
+					} else if (gameBoard[row][col] == -1) {
 						System.out.print("| " + "O" + " ");
 					} else {
 						System.out.print("| " + "-" + " ");
 					}
 				} else {
-					if (gameBoard[i][j] == 1) {
+					if (gameBoard[row][col] == 1) {
 						System.out.println("| " + "X" + " |");
-					} else if (gameBoard[i][j] == -1) {
+					} else if (gameBoard[row][col] == -1) {
 						System.out.println("| " + "O" + " |");
 					} else {
 						System.out.println("| " + "-" + " |");
