@@ -61,6 +61,16 @@ public class Board
 		return winner;
 	}
 
+	public int getRowPosition(int col){
+		int rowPosition = -1;
+		for (int row = 0; row < 6; row++){
+			if (gameBoard[row][col] == EMPTY){
+				rowPosition = row;
+			}
+		}
+		return rowPosition;
+	}
+
 	public void setWinner(int winner) {
 		this.winner = winner;
 	}
@@ -95,7 +105,11 @@ public class Board
 		gameBoard[row][col] = letter;
 		lastLetterPlayed = letter;
 	}
-
+	public void makeMove(int col, int letter){
+		lastMove = new Move(getRowPosition(col), col);
+		gameBoard[getRowPosition(col)][col] = letter;
+		lastLetterPlayed = letter;
+	}
     //Checks whether a move is valid; whether a square is empty
 	public boolean isValidMove(int row, int col)
 	{
@@ -142,9 +156,14 @@ public class Board
 				 Olines = Olines + 100;
 			 }
 		 }
-		 return Xlines - Olines;  
+		 return Xlines - Olines;
 	}
 
+	public boolean checkColumn(int col) {
+		if (gameBoard[0][col] == EMPTY) {
+			return false;
+		} else { return true; }
+	}
 
 
   public boolean hasSomeoneWon() {
@@ -195,7 +214,6 @@ public class Board
 		if (hasSomeoneWon()) {
 			return true;
 		}
-
 		for (int row = 0; row < 6; row++) {
 			for (int col = 0; col < 7; col++) {
 				if (gameBoard[row][col] == EMPTY) {return false;}

@@ -42,6 +42,37 @@ public class Minimax {
 
 
 
+  // The maximum and minimum functions are called interchangingly, one after another until a max depth is reached
+
+  //Min works similarly to max
+public Move minimum(Board board, int depth) {
+      Random r = new Random();
+
+  if((board.isStalemate()) || (depth == maxDepth)) {
+    Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
+    return lastMove;
+  }
+  ArrayList<Board> children = new ArrayList<Board>(board.getChildren(Board.O));
+  Move minMove = new Move(Integer.MAX_VALUE);
+  for (Board child : children) {
+    Move move = maximum(child, depth + 1);
+    if(move.getValue() <= minMove.getValue()) {
+              if ((move.getValue() == minMove.getValue())) {
+                  if (r.nextInt(2) == 0) {
+                      minMove.setRow(child.getLastMove().getRow());
+                      minMove.setCol(child.getLastMove().getCol());
+                      minMove.setValue(move.getValue());
+                  }
+              }
+              else {
+                      minMove.setRow(child.getLastMove().getRow());
+                      minMove.setCol(child.getLastMove().getCol());
+                      minMove.setValue(move.getValue());
+              }
+          }
+      }
+      return minMove;
+}
 
 
 public Move maximum(Board board, int depth) {
@@ -50,7 +81,7 @@ public Move maximum(Board board, int depth) {
       /* If MAX is called on a state that is terminal or after a maximum depth is reached,
        * then a heuristic is calculated on the state and the move returned.
        */
-  if((board.checkGameOver()) || (depth == maxDepth))
+  if((board.isStalemate()) || (depth == maxDepth))
   {
     Move lastMove = new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
     return lastMove;
@@ -60,7 +91,7 @@ public Move maximum(Board board, int depth) {
   Move maxMove = new Move(Integer.MIN_VALUE);
   for (Board child : children) {
           //And for each child min is called, on a lower depth
-    Move move = min(child, depth + 1);
+    Move move = minimum(child, depth + 1);
           //The child-move with the greatest value is selected and returned by max
     if(move.getValue() >= maxMove.getValue()) {
               if ((move.getValue() == maxMove.getValue())) {
