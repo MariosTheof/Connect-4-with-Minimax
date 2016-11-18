@@ -5,7 +5,7 @@ public class Board
     //Variables for the Boards values
 	public static final int X = 1;
 	public static final int O = -1;
-	public static final int EMPTY = 0;
+
 
     //Immediate move that lead to this board
     private Move lastMove;
@@ -25,7 +25,7 @@ public class Board
 		gameBoard = new int[6][7];
 		for(int i = 0; i < 6; i++) {
 			for(int j = 0; j < 7; j++){
-				gameBoard[i][j] = EMPTY;
+				gameBoard[i][j] = 0;
 			}
 		}
 	}
@@ -64,7 +64,7 @@ public class Board
 	public int getRowPosition(int col){
 		int rowPosition = -1;
 		for (int row = 0; row < 6; row++){
-			if (gameBoard[row][col] == EMPTY){
+			if (gameBoard[row][col] == 0){
 				rowPosition = row;
 			}
 		}
@@ -110,14 +110,14 @@ public class Board
 		gameBoard[getRowPosition(col)][col] = letter;
 		lastLetterPlayed = letter;
 	}
-    //Checks whether a move is valid; whether a square is empty
+    //Checks whether a move is valid; whether a square is 0
 	public boolean isValidMove(int row, int col)
 	{
 		if ((row == -1) || (col == -1) || (row > 5) || (col > 6))
 		{
 			return false;
 		}
-		if(gameBoard[row][col] != EMPTY)
+		if(gameBoard[row][col] != 0)
 		{
 			return false;
 		}
@@ -160,18 +160,24 @@ public class Board
 	}
 
 	public boolean checkColumn(int col) {
-		if (gameBoard[0][col] == EMPTY) {
+		if (gameBoard[0][col] == 0) {
 			return false;
 		} else { return true; }
 	}
 
+	public boolean overflowPrevention(int row, int col) {
+		if ((row <= -1) || (col <= -1) || (row > 5) || (col > 6)) {
+			return false;
+		}
+		return true;
+	}
 
   public boolean hasSomeoneWon() {
 
 		//Checks if win in a column
     for (int i = 5; i >= 3; i--) {
       for (int j = 0; j < 4; j++) {
-        if (gameBoard[i][j] != EMPTY && gameBoard[i][j] == gameBoard[i][j+1] && gameBoard[i][j] == gameBoard[i][j+2] && gameBoard[i][j] == gameBoard[i][j+3]){
+        if (gameBoard[i][j] != 0 && gameBoard[i][j] == gameBoard[i][j+1] && gameBoard[i][j] == gameBoard[i][j+2] && gameBoard[i][j] == gameBoard[i][j+3]){
 					setWinner(gameBoard[i][j]);
 					return true;
 				}
@@ -181,7 +187,7 @@ public class Board
 		//Checks if win in a row
 		for (int i = 5; i >= 3; i--) {
 			for (int j = 0; j < 7; j++) {
-				if (gameBoard[i][j] != EMPTY && gameBoard[i][j] == gameBoard[i-1][j] && gameBoard[i][j] == gameBoard[i-2][j] && gameBoard[i][j] == gameBoard[i-3][j]){
+				if (gameBoard[i][j] != 0 && gameBoard[i][j] == gameBoard[i-1][j] && gameBoard[i][j] == gameBoard[i-2][j] && gameBoard[i][j] == gameBoard[i-3][j]){
 					setWinner(gameBoard[i][j]);
 					return true;
 				}
@@ -189,19 +195,23 @@ public class Board
 		}
 
 		//Checks if win in diagonal
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 7; j++) {
-				if (gameBoard[i][j] != EMPTY && gameBoard[i][j] == gameBoard[i+1][j+1] && gameBoard[i][j] == gameBoard[i+2][j+2] && gameBoard[i][j] == gameBoard[i+3][j+3]){
-					setWinner(gameBoard[i][j]);
-					return true;
-				}
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 4; j++) {
+					if (gameBoard[i][j] != 0 && gameBoard[i][j] == gameBoard[i+1][j+1] && gameBoard[i][j] == gameBoard[i+2][j+2] && gameBoard[i][j] == gameBoard[i+3][j+3]){
+						setWinner(gameBoard[i][j]);
+						return true;
+					}
+
 			}
 		}
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 7; j++) {
-				if (gameBoard[i][j] != EMPTY && gameBoard[i][j] == gameBoard[i-1][j+1] && gameBoard[i][j] == gameBoard[i-2][j+2] && gameBoard[i][j] == gameBoard[i-3][j+3]){
-					setWinner(gameBoard[i][j]);
-					return true;
+				//Checks if we can inside the bounds of the board
+				if ( overflowPrevention(i - 3, j + 3)) {
+					if (gameBoard[i][j] != 0 && gameBoard[i][j] == gameBoard[i-1][j+1] && gameBoard[i][j] == gameBoard[i-2][j+2] && gameBoard[i][j] == gameBoard[i-3][j+3]){
+						setWinner(gameBoard[i][j]);
+						return true;
+					}
 				}
 			}
 		}
@@ -216,7 +226,7 @@ public class Board
 		}
 		for (int row = 0; row < 6; row++) {
 			for (int col = 0; col < 7; col++) {
-				if (gameBoard[row][col] == EMPTY) {return false;}
+				if (gameBoard[row][col] == 0) {return false;}
 			}
 		}
 		return true;

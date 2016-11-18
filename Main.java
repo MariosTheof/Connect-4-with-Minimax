@@ -18,7 +18,7 @@ public class Main {
 
 
       if (connect4.getLastLetterPlayed() == Board.O) {
-        System.out.println("Human moves.");
+        System.out.println("Your move.");
         System.out.println(" Choose column from 1-7 :");
         XColPos = in.nextInt();
 
@@ -33,7 +33,7 @@ public class Main {
         System.out.println("\n Computer moves ");
         Move OMove = ai.MoveMiniMax(connect4);
         connect4.makeMove(OMove.getCol(), Board.O);
-        
+
       }
       connect4.print();
     }
